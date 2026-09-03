@@ -19,7 +19,9 @@ public class Disciplina {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private Grade id_grade;
+    @ManyToOne
+    @JoinColumn(name = "id_grade")
+    private Grade grade;
     private String nome_disciplina;
     private String nome_professor;
 

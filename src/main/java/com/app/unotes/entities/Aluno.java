@@ -22,14 +22,13 @@ public class Aluno {
     private String nome_aluno;
     private String sobrenome_aluno;
     @Column(unique = true)
-    private String email_aluno;
+    private String email;
     private String senha_aluno;
     private String biografia_aluno;
     private String curso_aluno;
     private String data_nascimento_aluno;
 
-    @OneToMany
-    @JoinColumn(name = "id_aluno")
-    private List<Grade> grades_aluno = new ArrayList<>();
+    @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL)
+    private List<Grade> grades = new ArrayList<>();
 
 }

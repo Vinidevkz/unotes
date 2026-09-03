@@ -19,13 +19,14 @@ public class Grade {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private Aluno id_aluno;
+    @ManyToOne
+    @JoinColumn(name = "id_aluno")
+    private Aluno aluno;
     private String nome_grade;
     private Integer semestre_grade;
     private Integer ano_grade;
 
-    @OneToMany
-    @JoinColumn(name = "id_grade")
+    @OneToMany(mappedBy = "grade", cascade = CascadeType.ALL)
     private List<Disciplina> disciplinas = new ArrayList<>();
 
 }
