@@ -17,7 +17,7 @@ import java.util.UUID;
 public class Aluno {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String nome_aluno;
     private String sobrenome_aluno;
