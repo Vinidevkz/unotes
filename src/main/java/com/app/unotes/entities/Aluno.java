@@ -3,6 +3,7 @@ package com.app.unotes.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -26,7 +27,7 @@ public class Aluno {
     private String senha_aluno;
     private String biografia_aluno;
     private String curso_aluno;
-    private String data_nascimento_aluno;
+    private LocalDate data_nascimento_aluno;
 
     @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL)
     private List<Grade> grades = new ArrayList<>();

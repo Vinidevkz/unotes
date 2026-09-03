@@ -1,5 +1,6 @@
 package com.app.unotes.configuration;
 
+import com.app.unotes.entities.Aluno;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -25,17 +27,17 @@ public class TokenProvider {
 
     //create
     public String generateToken(Authentication authentication){
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Aluno aluno = (Aluno) authentication.getPrincipal();
 
-        return buildToken(userDetails.getUsername());
+        return buildToken(aluno.getId());
     }
 
-    public String buildToken(String username){
+    public String buildToken(UUID id){
         Date now = new Date();
         Date expiration = new Date(now.getTime() + expirationTime);
 
         return Jwts.builder()
-                .subject(username)
+                .subject(id.toString())
                 .issuedAt(now)
                 .expiration(expiration)
                 .signWith(getSigningKey())
