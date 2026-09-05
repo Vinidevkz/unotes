@@ -6,6 +6,7 @@ import com.app.unotes.responsedtos.AlunoResponseDTO;
 import com.app.unotes.services.AlunoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +19,10 @@ public class AlunoController {
 
     //cadastro
     @PostMapping("/auth/cadastro")
-    public ResponseEntity<AlunoResponseDTO> cadastro_aluno(@RequestBody @Valid AlunoDTO alunoDTO){
-        AlunoResponseDTO alunoResponseDTO = alunoService.cadastro_aluno(alunoDTO);
+    public ResponseEntity<AlunoResponseDTO> cadastroAluno(@RequestBody @Valid AlunoDTO alunoDTO){
+        AlunoResponseDTO alunoResponseDTO = alunoService.cadastroAluno(alunoDTO);
 
-        return ResponseEntity.ok().body(alunoResponseDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(alunoResponseDTO);
     }
 
     //login
@@ -31,7 +32,7 @@ public class AlunoController {
     }
 
     //get
-    @GetMapping("/${nome_aluno}")
+    @GetMapping("/{nome_aluno}")
     public void get_aluno(@PathVariable String nome_aluno){
         return;
     }
