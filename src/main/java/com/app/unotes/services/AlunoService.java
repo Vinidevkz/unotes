@@ -31,8 +31,6 @@ public class AlunoService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
 
-    private final GetNullFieldsInAlunoUpdateDTO getNullFieldsInAlunoUpdateDTO;
-
     @Transactional
     public AlunoResponseDTO cadastroAluno(AlunoDTO alunoDTO){
 
@@ -52,7 +50,7 @@ public class AlunoService {
     }
 
     @Transactional
-    public AlunoResponseDTO loginAluno(AlunoLoginDTO alunoLoginDTO) throws AccountNotFoundException {
+    public AlunoResponseDTO loginAluno(AlunoLoginDTO alunoLoginDTO) throws EntityNotFoundException {
         Aluno aluno = alunoRepository.findByEmail(alunoLoginDTO.email_aluno()).orElseThrow(BadCredentialsException::new);
         boolean isPasswordValid = passwordEncoder.matches(alunoLoginDTO.senha_aluno(), aluno.getSenha_aluno());
 
@@ -92,13 +90,11 @@ public class AlunoService {
     }
 
     @Transactional
-    public HttpStatus deleteAluno(UUID id){
+    public void deleteAluno(UUID id) throws EntityNotFoundException{
 
         Aluno aluno = alunoRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         alunoRepository.delete(aluno);
-
-        return HttpStatus.NO_CONTENT;
 
     }
 

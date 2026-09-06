@@ -34,7 +34,7 @@ public class AlunoController {
 
     //login
     @PostMapping("/auth/login")
-    public ResponseEntity<AlunoResponseDTO> loginAluno(@RequestBody @Valid AlunoLoginDTO alunoLoginDTO) throws AccountNotFoundException {
+    public ResponseEntity<AlunoResponseDTO> loginAluno(@RequestBody @Valid AlunoLoginDTO alunoLoginDTO) throws EntityNotFoundException {
         AlunoResponseDTO alunoResponseDTO = alunoService.loginAluno(alunoLoginDTO);
 
         return ResponseEntity.ok().body(alunoResponseDTO);
@@ -54,7 +54,7 @@ public class AlunoController {
 
     //update
     @PutMapping("/update")
-    public ResponseEntity<AlunoDataResponseDTO> updateAluno(@RequestBody AlunoUpdateDTO alunoUpdateDTO, Authentication authentication){
+    public ResponseEntity<AlunoDataResponseDTO> updateAluno(@RequestBody AlunoUpdateDTO alunoUpdateDTO, Authentication authentication) throws EntityNotFoundException{
 
         UUID id = UUID.fromString(authentication.getName());
         AlunoDataResponseDTO alunoDataResponseDTO = alunoService.updateAluno(alunoUpdateDTO, id);
@@ -62,12 +62,15 @@ public class AlunoController {
         return ResponseEntity.ok().body(alunoDataResponseDTO);
     }
 
-    //put
     //delete
-    //criar grade
-    //criar disciplina
-    //criar anotação
-    //criar lembrete
+    @DeleteMapping("/deletar_perfil")
+    public ResponseEntity<Void> deletarAluno(Authentication authentication) throws EntityNotFoundException{
 
+        UUID id = UUID.fromString(authentication.getName());
+        alunoService.deleteAluno(id);
+
+        return ResponseEntity.noContent().build();
+
+    }
 
 }
