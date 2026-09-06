@@ -3,16 +3,21 @@ package com.app.unotes.services;
 import com.app.unotes.configuration.TokenProvider;
 import com.app.unotes.dtos.AlunoDTO;
 import com.app.unotes.dtos.AlunoLoginDTO;
+import com.app.unotes.dtos.AlunoUpdateDTO;
 import com.app.unotes.entities.Aluno;
 import com.app.unotes.repository.AlunoRepository;
 import com.app.unotes.responsedtos.AlunoDataResponseDTO;
 import com.app.unotes.responsedtos.AlunoResponseDTO;
+import com.app.unotes.tools.GetNullFieldsInAlunoUpdateDTO;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import com.app.unotes.exceptions.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.util.BeanUtil;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.time.LocalDate;
@@ -25,6 +30,8 @@ public class AlunoService {
     private final AlunoRepository alunoRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
+
+    private final GetNullFieldsInAlunoUpdateDTO getNullFieldsInAlunoUpdateDTO;
 
     @Transactional
     public AlunoResponseDTO cadastroAluno(AlunoDTO alunoDTO){
@@ -59,19 +66,42 @@ public class AlunoService {
     }
 
     @Transactional
-    public AlunoDataResponseDTO getAluno(String nome_aluno, UUID id) throws AccountNotFoundException{
+    public AlunoDataResponseDTO getAluno(String nome_aluno, UUID id) throws EntityNotFoundException{
 
-        Aluno aluno = alunoRepository.findById(id).orElseThrow(BadCredentialsException::new);
+        Aluno aluno = alunoRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         if(nome_aluno != aluno.getNome_aluno()){
             throw new BadCredentialsException();
         }
 
-        AlunoDataResponseDTO alunoDataResponseDTO = new AlunoDataResponseDTO(aluno.getNome_aluno(), aluno.getSobrenome_aluno(), aluno.getEmail(), aluno.getCurso_aluno(), aluno.getBiografia_aluno(), aluno.getData_nascimento_aluno());
+        AlunoDataResponseDTO alunoDataResponseDTO = new AlunoDataResponseDTO(aluno.getNome_aluno(), aluno.getSobrenome_aluno(), aluno.getCurso_aluno(), aluno.getBiografia_aluno(), aluno.getData_nascimento_aluno());
 
         return alunoDataResponseDTO;
 
     }
+
+    @Transactional
+    public AlunoDataResponseDTO updateAluno(AlunoUpdateDTO alunoUpdateDTO, UUID id){
+
+        Aluno aluno = alunoRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        BeanUtils.copyProperties(alunoUpdateDTO, aluno, GetNullFieldsInAlunoUpdateDTO.getNullPropertyNames(alunoUpdateDTO));
+
+        return new AlunoDataResponseDTO(aluno);
+
+    }
+
+    @Transactional
+    public HttpStatus deleteAluno(UUID id){
+
+        Aluno aluno = alunoRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        alunoRepository.delete(aluno);
+
+        return HttpStatus.NO_CONTENT;
+
+    }
+
 
 
 

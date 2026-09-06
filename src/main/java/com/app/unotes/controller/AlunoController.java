@@ -2,9 +2,11 @@ package com.app.unotes.controller;
 
 import com.app.unotes.dtos.AlunoDTO;
 import com.app.unotes.dtos.AlunoLoginDTO;
+import com.app.unotes.dtos.AlunoUpdateDTO;
 import com.app.unotes.responsedtos.AlunoDataResponseDTO;
 import com.app.unotes.responsedtos.AlunoResponseDTO;
 import com.app.unotes.services.AlunoService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,7 +42,7 @@ public class AlunoController {
 
     //get
     @GetMapping("/{nome_aluno}")
-    public ResponseEntity<AlunoDataResponseDTO> getAluno(@PathVariable("nome_aluno") String nome_aluno, Authentication authentication) throws AccountNotFoundException {
+    public ResponseEntity<AlunoDataResponseDTO> getAluno(@PathVariable("nome_aluno") String nome_aluno, Authentication authentication) throws EntityNotFoundException {
 
         UUID id = UUID.fromString(authentication.getName());
 
@@ -51,6 +53,15 @@ public class AlunoController {
     }
 
     //update
+    @PutMapping("/update")
+    public ResponseEntity<AlunoDataResponseDTO> updateAluno(@RequestBody AlunoUpdateDTO alunoUpdateDTO, Authentication authentication){
+
+        UUID id = UUID.fromString(authentication.getName());
+        AlunoDataResponseDTO alunoDataResponseDTO = alunoService.updateAluno(alunoUpdateDTO, id);
+
+        return ResponseEntity.ok().body(alunoDataResponseDTO);
+    }
+
     //put
     //delete
     //criar grade
