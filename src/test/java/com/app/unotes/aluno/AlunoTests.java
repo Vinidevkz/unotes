@@ -9,6 +9,7 @@ import com.app.unotes.responsedtos.AlunoResponseDTO;
 import com.app.unotes.services.AlunoService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -120,7 +121,6 @@ public class AlunoTests {
         )
                 .andExpect(status().isCreated());
 
-
     }
 
     //login
@@ -139,7 +139,6 @@ public class AlunoTests {
                         .content(jsonbody)
         )
                 .andExpect(status().isOk());
-
 
     }
 
@@ -187,12 +186,24 @@ public class AlunoTests {
                         .content(alunoUpdateBody)
         ).andExpect(status().isOk());
 
+    }
+
+    //delete
+    @Test
+    @WithMockUser(username = "123e4567-e89b-12d3-a456-426614174000")
+    @DisplayName("Deve retornar 204 NO CONTENT ao deletar um aluno.")
+    void deveRetornar204NoContentAoDeletarUmAluno() throws Exception {
+
+        UUID id = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+
+        Mockito.doNothing().when(alunoService).deleteAluno(id);
+
+        mockMvc.perform(
+                delete("/v1/aluno/deletar_perfil")
+        ).andExpect(status().isNoContent());
 
     }
 
-
-    //put
-    //delete
     //criar grade
     //criar disciplina
     //criar anotação
