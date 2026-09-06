@@ -26,7 +26,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AlunoTests {
@@ -102,7 +101,6 @@ public class AlunoTests {
        return jsonbody;
 
    }
-
    //---------------------
 
     //cadastro
@@ -115,7 +113,7 @@ public class AlunoTests {
 
         when(alunoService.cadastroAluno(any(AlunoDTO.class))).thenReturn(alunoResponseDTO);
 
-        mockMvc.perform(post("/v1/aluno/auth/cadastro")
+        mockMvc.perform(post("/v1/alunos/auth/cadastro")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonbody)
         )
@@ -134,7 +132,7 @@ public class AlunoTests {
         when(alunoService.loginAluno(any(AlunoLoginDTO.class))).thenReturn(alunoResponseDTO);
 
         mockMvc.perform(
-                post("/v1/aluno/auth/login")
+                post("/v1/alunos/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonbody)
         )
@@ -155,7 +153,7 @@ public class AlunoTests {
         when(alunoService.getAluno(nome_aluno, id)).thenReturn(responseDTO);
 
         mockMvc.perform(
-                get("/v1/aluno/{nome_aluno}", nome_aluno)
+                get("/v1/alunos/{nome_aluno}", nome_aluno)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
 
@@ -181,7 +179,7 @@ public class AlunoTests {
         when(alunoService.updateAluno(alunoUpdateDTO, id)).thenReturn(alunoDataResponseDTO);
 
         mockMvc.perform(
-                put("/v1/aluno/update")
+                put("/v1/alunos/update")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(alunoUpdateBody)
         ).andExpect(status().isOk());
@@ -199,7 +197,7 @@ public class AlunoTests {
         Mockito.doNothing().when(alunoService).deleteAluno(id);
 
         mockMvc.perform(
-                delete("/v1/aluno/deletar_perfil")
+                delete("/v1/alunos/deletar_perfil")
         ).andExpect(status().isNoContent());
 
     }

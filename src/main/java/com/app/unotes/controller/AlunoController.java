@@ -18,7 +18,7 @@ import javax.security.auth.login.AccountNotFoundException;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/aluno")
+@RequestMapping("/v1/alunos")
 @RequiredArgsConstructor
 public class AlunoController {
 
