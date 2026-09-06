@@ -5,6 +5,7 @@ import com.app.unotes.dtos.AlunoDTO;
 import com.app.unotes.dtos.AlunoLoginDTO;
 import com.app.unotes.entities.Aluno;
 import com.app.unotes.repository.AlunoRepository;
+import com.app.unotes.responsedtos.AlunoDataResponseDTO;
 import com.app.unotes.responsedtos.AlunoResponseDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -54,6 +56,21 @@ public class AlunoService {
         String token = tokenProvider.buildToken(aluno.getId());
 
         return new AlunoResponseDTO(aluno, token);
+    }
+
+    @Transactional
+    public AlunoDataResponseDTO getAluno(String nome_aluno, UUID id) throws AccountNotFoundException{
+
+        Aluno aluno = alunoRepository.findById(id).orElseThrow(BadCredentialsException::new);
+
+        if(nome_aluno != aluno.getNome_aluno()){
+            throw new BadCredentialsException();
+        }
+
+        AlunoDataResponseDTO alunoDataResponseDTO = new AlunoDataResponseDTO(aluno.getNome_aluno(), aluno.getSobrenome_aluno(), aluno.getEmail(), aluno.getCurso_aluno(), aluno.getBiografia_aluno(), aluno.getData_nascimento_aluno());
+
+        return alunoDataResponseDTO;
+
     }
 
 

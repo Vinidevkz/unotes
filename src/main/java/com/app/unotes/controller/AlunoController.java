@@ -2,13 +2,18 @@ package com.app.unotes.controller;
 
 import com.app.unotes.dtos.AlunoDTO;
 import com.app.unotes.dtos.AlunoLoginDTO;
+import com.app.unotes.responsedtos.AlunoDataResponseDTO;
 import com.app.unotes.responsedtos.AlunoResponseDTO;
 import com.app.unotes.services.AlunoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import javax.security.auth.login.AccountNotFoundException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/aluno")
@@ -27,14 +32,22 @@ public class AlunoController {
 
     //login
     @PostMapping("/auth/login")
-    public void login_aluno(@RequestBody @Valid AlunoLoginDTO alunoLoginDTO){
-        return;
+    public ResponseEntity<AlunoResponseDTO> loginAluno(@RequestBody @Valid AlunoLoginDTO alunoLoginDTO) throws AccountNotFoundException {
+        AlunoResponseDTO alunoResponseDTO = alunoService.loginAluno(alunoLoginDTO);
+
+        return ResponseEntity.ok().body(alunoResponseDTO);
     }
 
     //get
     @GetMapping("/{nome_aluno}")
-    public void get_aluno(@PathVariable String nome_aluno){
-        return;
+    public ResponseEntity<AlunoDataResponseDTO> getAluno(@PathVariable("nome_aluno") String nome_aluno, Authentication authentication) throws AccountNotFoundException {
+
+        UUID id = UUID.fromString(authentication.getName());
+
+        AlunoDataResponseDTO alunoDataResponseDTO = alunoService.getAluno(nome_aluno, id);
+
+        return ResponseEntity.ok().body(alunoDataResponseDTO);
+
     }
 
     //update
