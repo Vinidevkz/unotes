@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.util.UUID;
 
 @Service
@@ -42,6 +43,19 @@ public class GradeService {
     }
 
     //ver grade especifica
+    public GradeResponseDTO getGrade(String nomeGrade, UUID id) throws EntityNotFoundException{
+
+        Grade grade = gradeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        if(!grade.getNome_grade().equals(nomeGrade)){
+            throw  new EntityNotFoundException();
+        }
+
+        GradeResponseDTO gradeResponseDTO = new GradeResponseDTO(grade.getNome_grade(), grade.getSemestre_grade(), grade.getAno_grade());
+
+        return gradeResponseDTO;
+
+    }
 
     //ver grades de um aluno
 
