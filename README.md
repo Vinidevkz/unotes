@@ -2,7 +2,7 @@
 # UNotes
 Organize sua vida acadêmica em segundos.
 ### Links
-📄 Leia a documentação completa em:
+📄 Leia a documentação completa em: https://drive.google.com/file/d/1PspnVAhRtNKyTR_zYp2tCgAiBgsKC9dp/view?usp=sharing
 
 📱 Baixe o aplictivo em:
 
