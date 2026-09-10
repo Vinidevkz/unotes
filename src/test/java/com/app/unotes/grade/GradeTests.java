@@ -3,6 +3,7 @@ package com.app.unotes.grade;
 import com.app.unotes.dtos.GradeDTO;
 import com.app.unotes.entities.Grade;
 import com.app.unotes.responsedtos.GradeResponseDTO;
+import com.app.unotes.responsedtos.GradesDeUmAlunoResponseDTO;
 import com.app.unotes.services.GradeService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,9 +16,12 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -49,11 +53,24 @@ public class GradeTests {
         return gradeResponseDTO;
     }
 
+    //-gerar GradesDeUmAlunoResponse
+    public GradesDeUmAlunoResponseDTO gerarGradesDeUmAlunoResponseDTO(UUID alunoId){
+
+        List<GradeResponseDTO> listaDeGrades = List.of(
+                new GradeResponseDTO("Grade 2026.1", 1, 2026),
+                new GradeResponseDTO( "Grade 2026.2", 2, 2026)
+        );
+
+        return new GradesDeUmAlunoResponseDTO(alunoId, listaDeGrades);
+
+    }
+
     //---------------------
 
+    //criar grade
     @Test
     @WithMockUser(username = "123e4567-e89b-12d3-a456-426614174000")
-    @DisplayName("Deve retornar 201 CREATED ao criar uma nova grade")
+    @DisplayName("Deve retornar 201 CREATED ao criar uma nova grade.")
     void deveRetornar201CreatedAoCriarUmaNovaGrade() throws Exception {
 
         GradeDTO gradeDTO = gerarGradeDTO();
@@ -70,6 +87,48 @@ public class GradeTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBody)
         ).andExpect(status().isCreated());
+
+    }
+
+    //ver grade
+    @Test
+    @WithMockUser(username = "123e4567-e89b-12d3-a456-426614174000")
+    @DisplayName("Deve retornar 200 OK ao ler uma grade.")
+    void deveRetornar200OkAoLerUmaGrade() throws Exception {
+
+        UUID id = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+        GradeResponseDTO gradeResponseDTO = gerarGradeResponseDTO();
+        String jsonBody =  objectMapper.writeValueAsString(gradeResponseDTO);
+        String nome_grade = "faculdade";
+
+        when(gradeService.getGrade(nome_grade, id)).thenReturn(gradeResponseDTO);
+
+        mockMvc.perform(
+                get("/v1/grades/{nome_grade}", nome_grade)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonBody)
+        ).andExpect(status().isOk());
+
+    }
+
+    //ver todas as grades de um aluno
+    @Test
+    @WithMockUser(username = "123e4567-e89b-12d3-a456-426614174000")
+    @DisplayName("Deve retornar 200 OK ao pegar todas as grades de um aluno.")
+    void deveRetornar200OkAoPegarTodasAsGradesDeUmAluno() throws Exception {
+
+        UUID id = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+        GradesDeUmAlunoResponseDTO gradesDeUmAlunoResponseDTO = gerarGradesDeUmAlunoResponseDTO(id);
+        String jsonBody = objectMapper.writeValueAsString(gradesDeUmAlunoResponseDTO);
+
+        when(gradeService.getGradesDeUmAluno(id)).thenReturn(gradesDeUmAlunoResponseDTO.grades());
+
+        mockMvc.perform(
+                get("/v1/grades/minhas_grades")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonBody)
+        ).andExpect(status().isOk());
+
 
     }
 
