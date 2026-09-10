@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.AccountNotFoundException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -58,6 +59,16 @@ public class GradeService {
     }
 
     //ver grades de um aluno
+    public List<GradeResponseDTO> getGradesDeUmAluno(UUID id){
+
+        List<Grade> grades = gradeRepository.findByAlunoId(id);
+
+
+
+        return grades.stream()
+                .map(GradeResponseDTO::fromEntity)
+                .toList();
+    }
 
     //atualizar grade
 

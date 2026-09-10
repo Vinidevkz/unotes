@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -31,7 +32,7 @@ public class GradeController {
     }
 
     //ver grade especifica
-    @GetMapping("/grades/{nomeGrade}")
+    @GetMapping("/{nomeGrade}")
     public ResponseEntity<GradeResponseDTO> verGrade(@PathVariable String nomeGrade, Authentication authentication){
 
         UUID id = UUID.fromString(authentication.getName());
@@ -43,6 +44,16 @@ public class GradeController {
     }
 
     //ver grades de um aluno
+    @GetMapping("/minhas_grades")
+    public ResponseEntity<List<GradeResponseDTO>> verGradesDeUmAluno(Authentication authentication){
+
+        UUID id = UUID.fromString(authentication.getName());
+
+        List<GradeResponseDTO> grades = gradeService.getGradesDeUmAluno(id);
+
+        return ResponseEntity.ok().body(grades);
+
+    }
 
     //atualizar grade
 
