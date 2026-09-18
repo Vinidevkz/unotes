@@ -1,0 +1,45 @@
+# propriedades globais (qualquer perfil)
+jwt:
+  expiration: 86400000
+  key: "w1CWO+oGJ4FC7r80A5ofJcDgWnPvfc3vMJL5uwKp4Qc="
+
+---
+
+# Config padrão H2 (Perfil: dev)
+spring:
+  profiles:
+    active: dev # ativo por padrão
+  datasource:
+    url: jdbc:h2:mem:testedb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+
+---
+
+# Config padrão Postgres (Perfil: prod)
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/unotes}
+    username: ${SPRING_DATASOURCE_USERNAME:user}
+    password: ${SPRING_DATASOURCE_PASSWORD:vini123}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format-sql: true
+  application:
+    name: unotes
