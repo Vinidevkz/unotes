@@ -154,10 +154,21 @@ public class GradeTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonbody)
         ).andExpect(status().isOk());
-
-
     }
 
+    //deletar uma grade
+    @Test
+    @WithMockUser(username = "123e4567-e89b-12d3-a456-426614174000")
+    @DisplayName("Deve retornar 200 NO_CONTENT ao deletar uma grade.")
+    void deveRetornar200NoContentAoDeletarUmaGrade() throws Exception{
 
+        UUID id_grade = UUID.randomUUID();
+        //UUID id_aluno = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+
+        mockMvc.perform(
+                delete("/v1/grades/deletar_grade/{id_grade}", id_grade)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNoContent());
+    }
 
 }
