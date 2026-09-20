@@ -1,6 +1,7 @@
 package com.app.unotes.grade;
 
 import com.app.unotes.dtos.GradeDTO;
+import com.app.unotes.dtos.GradeUpdateDTO;
 import com.app.unotes.entities.Grade;
 import com.app.unotes.responsedtos.GradeResponseDTO;
 import com.app.unotes.responsedtos.GradesDeUmAlunoResponseDTO;
@@ -21,8 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -63,6 +63,13 @@ public class GradeTests {
 
         return new GradesDeUmAlunoResponseDTO(alunoId, listaDeGrades);
 
+    }
+
+    //-gerar GradeUpdateDTO
+    public GradeUpdateDTO gerarGradeUpdateDTO(){
+        GradeUpdateDTO gradeUpdateDTO = new GradeUpdateDTO(UUID.randomUUID(), "novo_nome_teste", 2, 2025);
+
+        return gradeUpdateDTO;
     }
 
     //---------------------
@@ -127,6 +134,25 @@ public class GradeTests {
                 get("/v1/grades/minhas_grades")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBody)
+        ).andExpect(status().isOk());
+    }
+
+    //atualizar uma grade
+    @Test
+    @WithMockUser(username = "123e4567-e89b-12d3-a456-426614174000")
+    @DisplayName("Deve retornar 200 OK ao atualizar uma grade.")
+    void deveRetornar200OkAoAtualizarUmaGrade() throws Exception {
+
+        GradeUpdateDTO gradeUpdateDTO = gerarGradeUpdateDTO();
+        UUID id = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+        String jsonbody = objectMapper.writeValueAsString(gerarGradeResponseDTO());
+
+        when(gradeService.atualizarGrade(gradeUpdateDTO, id)).thenReturn(gerarGradeResponseDTO());
+
+        mockMvc.perform(
+                put("/v1/grades/atualizar_grade")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonbody)
         ).andExpect(status().isOk());
 
 
