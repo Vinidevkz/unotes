@@ -1,6 +1,7 @@
 package com.app.unotes.controller;
 
 import com.app.unotes.dtos.GradeDTO;
+import com.app.unotes.dtos.GradeUpdateDTO;
 import com.app.unotes.responsedtos.GradeResponseDTO;
 import com.app.unotes.services.GradeService;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,6 @@ public class GradeController {
         GradeResponseDTO gradeResponseDTO = gradeService.getGrade(nomeGrade, id);
 
         return ResponseEntity.ok().body(gradeResponseDTO);
-
     }
 
     //ver grades de um aluno
@@ -56,6 +56,16 @@ public class GradeController {
     }
 
     //atualizar grade
+    @PutMapping("/atualizar_grade")
+    public ResponseEntity<GradeResponseDTO> atualizarGrade(GradeUpdateDTO gradeUpdateDTO, Authentication authentication){
+
+        UUID id = UUID.fromString(authentication.getName());
+
+        GradeResponseDTO gradeResponseDTO = gradeService.atualizarGrade(gradeUpdateDTO, id);
+
+        return ResponseEntity.ok().body(gradeResponseDTO);
+
+    }
 
     //deletar grade
 

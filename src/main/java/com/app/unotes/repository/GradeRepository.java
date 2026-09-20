@@ -10,4 +10,6 @@ public interface GradeRepository extends JpaRepository<Grade, UUID> {
 
     //ver todas as grades de um aluno
     List<Grade> findByAlunoId(UUID alunoId);
+
+    //pegar grade pelo id do aluno
 }

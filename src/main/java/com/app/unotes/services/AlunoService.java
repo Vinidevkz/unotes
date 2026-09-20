@@ -13,13 +13,10 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
 import com.app.unotes.exceptions.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.util.BeanUtil;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.time.LocalDate;
 import java.util.UUID;
 
