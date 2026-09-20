@@ -57,17 +57,26 @@ public class GradeController {
 
     //atualizar grade
     @PutMapping("/atualizar_grade")
-    public ResponseEntity<GradeResponseDTO> atualizarGrade(GradeUpdateDTO gradeUpdateDTO, Authentication authentication){
+    public ResponseEntity<GradeResponseDTO> atualizarGrade(@RequestBody GradeUpdateDTO gradeUpdateDTO, Authentication authentication) throws Exception {
 
-        UUID id = UUID.fromString(authentication.getName());
+        UUID id_aluno = UUID.fromString(authentication.getName());
 
-        GradeResponseDTO gradeResponseDTO = gradeService.atualizarGrade(gradeUpdateDTO, id);
+        GradeResponseDTO gradeResponseDTO = gradeService.atualizarGrade(gradeUpdateDTO, id_aluno);
 
         return ResponseEntity.ok().body(gradeResponseDTO);
 
     }
 
     //deletar grade
+    @DeleteMapping("/deletar_grade/{id_grade}")
+    public ResponseEntity<Void> deletarGrade(@PathVariable UUID id_grade, Authentication authentication) throws Exception{
+
+        UUID id_aluno = UUID.fromString(authentication.getName());
+
+        gradeService.deletarGrade(id_grade, id_aluno);
+
+        return ResponseEntity.noContent().build();
+    }
 
 
 }

@@ -64,9 +64,9 @@ public class GradeService {
 
     //ver grades de um aluno
     @Transactional
-    public List<GradeResponseDTO> getGradesDeUmAluno(UUID id){
+    public List<GradeResponseDTO> getGradesDeUmAluno(UUID id_aluno){
 
-        List<Grade> grades = gradeRepository.findByAlunoId(id);
+        List<Grade> grades = gradeRepository.findByAlunoId(id_aluno);
 
         return grades.stream()
                 .map(GradeResponseDTO::new)
@@ -75,9 +75,13 @@ public class GradeService {
 
     //atualizar grade
     @Transactional
-    public GradeResponseDTO atualizarGrade(GradeUpdateDTO gradeUpdateDTO, UUID user_id){
+    public GradeResponseDTO atualizarGrade(GradeUpdateDTO gradeUpdateDTO, UUID id_aluno) throws Exception{
 
         Grade grade = gradeRepository.findById(gradeUpdateDTO.id_grade()).orElseThrow(EntityNotFoundException::new);
+
+        if(grade.getAluno().getId() != id_aluno){
+            throw new IllegalAccessException("");
+        }
 
         BeanUtils.copyProperties(gradeUpdateDTO, grade, GetNullFieldsInAlunoUpdateDTO.getNullPropertyNames(gradeUpdateDTO));
 
@@ -86,5 +90,17 @@ public class GradeService {
     }
 
     //deletar grade
+    @Transactional
+    public void deletarGrade(UUID id_grade, UUID id_aluno) throws Exception{
+
+        Grade grade = gradeRepository.findById(id_aluno).orElseThrow(EntityNotFoundException::new);
+
+        if(grade.getAluno().getId() != id_aluno){
+            throw new IllegalAccessException();
+        }
+
+        gradeRepository.delete(grade);
+
+    }
 
 }
