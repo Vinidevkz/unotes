@@ -1,6 +1,7 @@
 package com.app.unotes.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -22,8 +23,10 @@ public class Disciplina {
     @ManyToOne
     @JoinColumn(name = "id_grade")
     private Grade grade;
+    @NotNull(message = "O nome da disciplina não pode estar vazio.")
     @Size(max = 50, message = "O nome da disciplina deve ter no máximo 50 caracteres.")
     private String nome_disciplina;
+    @NotNull(message = "O nome do professor não pode estar vazio.")
     @Size(max = 100, message = "O nome do professor deve ter no máximo 100 caracteres.")
     private String nome_professor;
 
