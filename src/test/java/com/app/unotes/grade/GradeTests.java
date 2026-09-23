@@ -2,7 +2,6 @@ package com.app.unotes.grade;
 
 import com.app.unotes.dtos.GradeDTO;
 import com.app.unotes.dtos.GradeUpdateDTO;
-import com.app.unotes.entities.Grade;
 import com.app.unotes.responsedtos.GradeResponseDTO;
 import com.app.unotes.responsedtos.GradesDeUmAlunoResponseDTO;
 import com.app.unotes.services.GradeService;
@@ -17,7 +16,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
