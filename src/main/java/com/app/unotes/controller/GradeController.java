@@ -36,9 +36,9 @@ public class GradeController {
     @GetMapping("/{nomeGrade}")
     public ResponseEntity<GradeResponseDTO> verGrade(@PathVariable String nomeGrade, Authentication authentication){
 
-        UUID id = UUID.fromString(authentication.getName());
+        UUID id_aluno = UUID.fromString(authentication.getName());
 
-        GradeResponseDTO gradeResponseDTO = gradeService.getGrade(nomeGrade, id);
+        GradeResponseDTO gradeResponseDTO = gradeService.getGrade(nomeGrade, id_aluno);
 
         return ResponseEntity.ok().body(gradeResponseDTO);
     }

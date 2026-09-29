@@ -22,7 +22,6 @@ public class DisciplinaService {
 
     //criar disciplina
     public DisciplinaResponseDTO criarDisciplina(DisciplinaDTO disciplinaDTO){
-
         Grade grade = gradeRepository.findById(disciplinaDTO.id_grade()).orElseThrow(EntityNotFoundException::new);
 
         Disciplina disciplina = new Disciplina();
@@ -35,11 +34,15 @@ public class DisciplinaService {
         DisciplinaResponseDTO disciplinaResponseDTO = new DisciplinaResponseDTO(newDisciplina.getNome_disciplina(), newDisciplina.getNome_professor(), newDisciplina.getGrade());
 
         return disciplinaResponseDTO;
-
-
     }
 
     //ver disciplina especifica
+    public DisciplinaResponseDTO verDisciplina(UUID id_disciplina){
+        Disciplina disciplina = disciplinaRepository.findById(id_disciplina).orElseThrow(EntityNotFoundException::new);
+
+        return new DisciplinaResponseDTO(disciplina);
+    }
+
     //ver disciplinas de um aluno
     //atualizar disciplina
     //deletar disciplina

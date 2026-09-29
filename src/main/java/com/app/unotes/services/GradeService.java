@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.BeanUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,35 +29,28 @@ public class GradeService {
     //criar grade
     @Transactional
     public GradeResponseDTO criarGrade(GradeDTO gradeDTO, UUID id){
-
         Aluno aluno = alunoRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         Grade grade = new Grade();
-        grade.setNome_grade(gradeDTO.nome_grade());
-        grade.setSemestre_grade(gradeDTO.semestre_grade());
-        grade.setAno_grade(gradeDTO.ano_grade());
+        grade.setNomeGrade(gradeDTO.nome_grade());
+        grade.setSemestreGrade(gradeDTO.semestre_grade());
+        grade.setAnoGrade(gradeDTO.ano_grade());
         grade.setAluno(aluno);
 
         Grade novaGrade = gradeRepository.save(grade);
 
-        GradeResponseDTO gradeResponseDTO = new GradeResponseDTO(novaGrade.getNome_grade(), novaGrade.getSemestre_grade(), novaGrade.getAno_grade());
+        GradeResponseDTO gradeResponseDTO = new GradeResponseDTO(novaGrade);
 
         return gradeResponseDTO;
-
-
     }
 
     //ver grade especifica
     @Transactional
     public GradeResponseDTO getGrade(String nomeGrade, UUID id) throws EntityNotFoundException{
 
-        Grade grade = gradeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Grade grade = gradeRepository.findByAlunoIdAndNomeGrade(id, nomeGrade).orElseThrow(EntityNotFoundException::new);
 
-        if(!grade.getNome_grade().equals(nomeGrade)){
-            throw  new EntityNotFoundException();
-        }
-
-        GradeResponseDTO gradeResponseDTO = new GradeResponseDTO(grade.getNome_grade(), grade.getSemestre_grade(), grade.getAno_grade());
+        GradeResponseDTO gradeResponseDTO = new GradeResponseDTO(grade);
 
         return gradeResponseDTO;
 
@@ -66,7 +60,7 @@ public class GradeService {
     @Transactional
     public List<GradeResponseDTO> getGradesDeUmAluno(UUID id_aluno){
 
-        List<Grade> grades = gradeRepository.findByAlunoId(id_aluno);
+        List<Grade> grades = Collections.singletonList((Grade) gradeRepository.findAllByAlunoId(id_aluno).orElseThrow(EntityNotFoundException::new));
 
         return grades.stream()
                 .map(GradeResponseDTO::new)
