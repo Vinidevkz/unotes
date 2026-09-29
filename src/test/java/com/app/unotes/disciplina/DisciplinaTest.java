@@ -18,6 +18,7 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.UUID;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -73,5 +74,30 @@ public class DisciplinaTest {
                         .content(jsonBody)
         ).andExpect(status().isCreated());
     }
+
+    //ver disciplina
+    @Test
+    @WithMockUser(username = "123e4567-e89b-12d3-a456-426614174000")
+    @DisplayName("Deve retornar 200 OK ao buscar uma disciplina especifica.")
+    void deveRetornar200OkAoBuscarUmaDisciplinaEspecifica() throws Exception{
+
+        UUID id_grade = UUID.randomUUID();
+        DisciplinaResponseDTO disciplinaResponseDTO = gerarDisciplinaResponseDTO();
+        String jsonbody = objectMapper.writeValueAsString(disciplinaResponseDTO);
+
+        when(disciplinaService.verDisciplina(id_grade)).thenReturn(disciplinaResponseDTO);
+
+        mockMvc.perform(
+                get("/v1/disciplinas/{id_grade}", id_grade)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonbody)
+        ).andExpect(status().isOk());
+
+    }
+
+    //editar disciplina
+
+    //deletar disciplina
+
 
 }
