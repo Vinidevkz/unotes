@@ -37,4 +37,6 @@
         @OneToMany(mappedBy = "grade", cascade = CascadeType.ALL)
         private List<Disciplina> disciplinas = new ArrayList<>();
 
+        public Grade(String gradeTeste, int i, int i1) {
+        }
     }

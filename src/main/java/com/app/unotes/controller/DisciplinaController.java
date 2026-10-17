@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -37,6 +38,13 @@ public class DisciplinaController {
     }
 
     //ver disciplinas de um aluno
+    @GetMapping("/minhas_disciplinas")
+    public ResponseEntity<List<DisciplinaResponseDTO>> verDisciplinasDeUmAluno(Authentication authentication){
+        UUID id_aluno = UUID.fromString(authentication.getName());
+
+        return ResponseEntity.ok().body(disciplinaService.verDisciplinasDeUmAluno(id_aluno));
+    }
+
     //atualizar disciplina
     //deletar disciplina
 

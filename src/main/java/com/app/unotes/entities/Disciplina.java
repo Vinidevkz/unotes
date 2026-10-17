@@ -21,6 +21,9 @@ public class Disciplina {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @ManyToOne
+    @JoinColumn(name = "id_aluno")
+    private Aluno aluno;
+    @ManyToOne
     @JoinColumn(name = "id_grade")
     private Grade grade;
     @NotNull(message = "O nome da disciplina não pode estar vazio.")
