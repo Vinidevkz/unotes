@@ -2,6 +2,7 @@ package com.app.unotes.grade;
 
 import com.app.unotes.dtos.GradeDTO;
 import com.app.unotes.dtos.GradeUpdateDTO;
+import com.app.unotes.entities.Grade;
 import com.app.unotes.responsedtos.GradeResponseDTO;
 import com.app.unotes.responsedtos.GradesDeUmAlunoResponseDTO;
 import com.app.unotes.services.GradeService;
@@ -46,7 +47,10 @@ public class GradeTests {
 
     //-gerar GradeResponseDTO
     public GradeResponseDTO gerarGradeResponseDTO(){
-        GradeResponseDTO gradeResponseDTO = new GradeResponseDTO("grade_teste", 2, 2026);
+
+        Grade grade = new Grade("grade_teste", 2, 2026);
+
+        GradeResponseDTO gradeResponseDTO = new GradeResponseDTO(grade);
 
         return gradeResponseDTO;
     }
@@ -54,9 +58,12 @@ public class GradeTests {
     //-gerar GradesDeUmAlunoResponse
     public GradesDeUmAlunoResponseDTO gerarGradesDeUmAlunoResponseDTO(UUID alunoId){
 
+        Grade grade = new Grade("grade_teste", 2, 2026);
+        GradeResponseDTO gradeResponseDTO = new GradeResponseDTO(grade);
+
         List<GradeResponseDTO> listaDeGrades = List.of(
-                new GradeResponseDTO("Grade 2026.1", 1, 2026),
-                new GradeResponseDTO( "Grade 2026.2", 2, 2026)
+                gradeResponseDTO,
+                gradeResponseDTO
         );
 
         return new GradesDeUmAlunoResponseDTO(alunoId, listaDeGrades);

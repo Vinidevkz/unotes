@@ -15,6 +15,8 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.Mockito.when;
@@ -94,6 +96,30 @@ public class DisciplinaTest {
         ).andExpect(status().isOk());
 
     }
+
+    //ver as disciplinas de um aluno
+    @Test
+    @WithMockUser(username = "123e4567-e89b-12d3-a456-426614174000")
+    @DisplayName("Deve retornar 200 OK ao buscar todas as disciplinas de um aluno específico.")
+    void deveRetornar200OkAoBuscarAsDisciplinasDeUmAluno() throws Exception{
+
+        UUID id_aluno = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+        List<DisciplinaResponseDTO> lista_teste = new ArrayList<>();
+
+        String jsonBody = objectMapper.writeValueAsString(lista_teste);
+
+
+        when(disciplinaService.verDisciplinasDeUmAluno(id_aluno)).thenReturn(lista_teste);
+
+        mockMvc.perform(
+                get("/v1/disciplinas/minhas_disciplinas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonBody)
+        ).andExpect(status().isOk());
+        
+    }
+
+
 
     //editar disciplina
 
