@@ -116,10 +116,7 @@ public class DisciplinaTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBody)
         ).andExpect(status().isOk());
-        
     }
-
-
 
     //editar disciplina
 
